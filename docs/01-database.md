@@ -8,22 +8,22 @@ Express 서버가 WebInfo ASP.NET HTTP 프록시를 통해 SQL을 실행합니�
 ```
 Express 서버
   └─ server/lib/webinfo.ts
-       └─ POST http://211.56.248.7:14283/CHANGWOO_TEST/WebInfo/sqlserver.aspx
-            └─ SQL Server (창우 ERP DB)
+       └─ POST <WEBINFO_URL>   ← .env 참고
+            └─ SQL Server (ERP DB)
 ```
 
 ### WebInfo 요청 형식
 
 ```http
-POST /CHANGWOO_TEST/WebInfo/sqlserver.aspx HTTP/1.1
+POST <WEBINFO_URL> HTTP/1.1
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 
-HTTP=CHANGWOO&SQL=SELECT+...
+HTTP=<WEBINFO_HTTP>&SQL=SELECT+...
 ```
 
 | 파라미터 | 값 | 설명 |
 |--------|-----|------|
-| `HTTP` | `CHANGWOO` | 회사/DB 식별자 |
+| `HTTP` | `.env → WEBINFO_HTTP` | 회사/DB 식별자 |
 | `SQL`  | SQL 문자열 | 실행할 SELECT/DML |
 
 ### WebInfo 응답 형식 (확인 필요)
@@ -158,10 +158,13 @@ router.get('/list', async (req, res) => {
 팀원 추가 시 `.env.example`을 복사하여 `.env`를 생성합니다.
 
 ```
-WEBINFO_URL=http://211.56.248.7:14283/CHANGWOO_TEST/WebInfo/sqlserver.aspx
-WEBINFO_HTTP=CHANGWOO
+WEBINFO_URL=<실제 WebInfo 엔드포인트 URL>   # 팀 내부 공유
+WEBINFO_HTTP=<회사 DB 식별자>
 WEBINFO_VERB=POST
 WEBINFO_TYPE=UTF-8
 PORT=3000
-SESSION_SECRET=...
+SESSION_SECRET=<랜덤 시크릿>
+MASTER_PASSWORD=<MASTER 로그인 패스워드>
 ```
+
+> 실제 값은 `.env.example`을 복사하여 `.env`를 생성한 뒤 팀 내부 채널에서 전달받아 입력합니다.
